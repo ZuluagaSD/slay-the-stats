@@ -9,6 +9,7 @@ packages/
 
 # User-specific
 local.props
+.env
 
 # IDE
 .vs/
