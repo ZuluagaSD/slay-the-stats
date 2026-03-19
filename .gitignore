@@ -1,0 +1,21 @@
+# Godot
+.godot/
+*.import
+
+# .NET
+bin/
+obj/
+packages/
+
+# User-specific
+local.props
+
+# IDE
+.vs/
+*.user
+*.suo
+*.csproj.user
+
+# OS
+Thumbs.db
+.DS_Store

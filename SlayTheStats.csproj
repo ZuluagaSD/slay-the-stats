@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>SlayTheStats</RootNamespace>
+    <AssemblyName>SlayTheStats</AssemblyName>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+
+  <!-- Auto-detect Steam library path -->
+  <PropertyGroup>
+    <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common</SteamLibraryPath>
+    <Sts2GamePath>$(SteamLibraryPath)\Slay the Spire 2</Sts2GamePath>
+    <Sts2DataPath>$(Sts2GamePath)\data_sts2_windows_x86_64</Sts2DataPath>
+  </PropertyGroup>
+
+  <!-- Import user-local overrides if present -->
+  <Import Project="local.props" Condition="Exists('local.props')" />
+
+  <!-- Game assembly references (all from game's data directory) -->
+  <ItemGroup>
+    <Reference Include="GodotSharp">
+      <HintPath>$(Sts2DataPath)\GodotSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataPath)\sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2DataPath)\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Copy output to game mods folder -->
+  <PropertyGroup>
+    <Sts2ModsPath>$(Sts2GamePath)\mods\SlayTheStats</Sts2ModsPath>
+  </PropertyGroup>
+
+  <Target Name="BuildPck" AfterTargets="Build">
+    <Exec Command="python &quot;$(ProjectDir)tools\build_pck.py&quot; &quot;$(ProjectDir)mod_manifest.json&quot; &quot;$(Sts2ModsPath)\$(AssemblyName).pck&quot;" />
+  </Target>
+
+  <Target Name="CopyToMods" AfterTargets="BuildPck">
+    <MakeDir Directories="$(Sts2ModsPath)" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(Sts2ModsPath)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)Resources\mod_image.png" DestinationFolder="$(Sts2ModsPath)" SkipUnchangedFiles="true" Condition="Exists('$(ProjectDir)Resources\mod_image.png')" />
+  </Target>
+
+</Project>

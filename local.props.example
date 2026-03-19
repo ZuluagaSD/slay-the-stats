@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!-- Override if your Steam library is not in the default location -->
+    <SteamLibraryPath>C:\Program Files (x86)\Steam\steamapps\common</SteamLibraryPath>
+
+    <!-- Path to Godot 4.5.1 Mono ("MegaDot") executable -->
+    <GodotPath>C:\path\to\MegaDot\Godot_v4.5.1-stable_mono_win64.exe</GodotPath>
+  </PropertyGroup>
+</Project>

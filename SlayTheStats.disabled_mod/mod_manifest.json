@@ -1,0 +1,10 @@
+{
+  "id": "SlayTheStats",
+  "name": "Slay The Stats",
+  "description": "Real-time combat stats tracking with live overlay and post-combat summaries for Slay the Spire 2 co-op.",
+  "version": "v0.1",
+  "pck_name": "SlayTheStats",
+  "author": "SlayTheStats",
+  "game_version": "v0.98.3",
+  "dependencies": []
+}
