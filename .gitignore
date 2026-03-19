@@ -20,3 +20,10 @@ local.props
 # OS
 Thumbs.db
 .DS_Store
+# Ignore extracted game assets (large binary files)
+web/public/game-assets/
+tools/sts2_watcher/publish/
+web/screenshots/
+web/node_modules/
+web/.next/
+web/public/game-assets/cards-full/

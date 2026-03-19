@@ -1958,7 +1958,7 @@ public sealed class GameReader : IDisposable
 
     private string ReadCreatureName(ClrHeap heap, ClrObject creature)
     {
-        // Try Player path: Creature.Player.Character.Id.Entry
+        // Try Player path: Creature.Player.Character.Id.Entry + NetId for co-op disambiguation
         try
         {
             var playerAddr = creature.ReadObjectField("<Player>k__BackingField");
@@ -1967,6 +1967,9 @@ public sealed class GameReader : IDisposable
                 var player = heap.GetObject(playerAddr);
                 if (player.IsValid)
                 {
+                    ulong netId = 0;
+                    try { netId = player.ReadField<ulong>("<NetId>k__BackingField"); } catch { }
+
                     var charAddr = player.ReadObjectField("<Character>k__BackingField");
                     if (charAddr != 0)
                     {
@@ -1974,7 +1977,16 @@ public sealed class GameReader : IDisposable
                         if (character.IsValid)
                         {
                             var name = ReadModelIdEntry(heap, character);
-                            if (name != "?") return name;
+                            if (name != "?")
+                            {
+                                // Append player tag for co-op disambiguation
+                                if (netId > 1)
+                                {
+                                    string playerTag = SteamNames.Get(netId);
+                                    return $"{name}:{playerTag}";
+                                }
+                                return name;
+                            }
                         }
                     }
                 }
